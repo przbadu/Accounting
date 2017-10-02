@@ -24,6 +24,10 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.0, >= 1.0.3)
+    active_model_serializers (0.10.3)
+      actionpack (>= 4.1, < 6)
+      activemodel (>= 4.1, < 6)
+      jsonapi (= 0.1.1.beta2)
     activejob (5.1.4)
       activesupport (= 5.1.4)
       globalid (>= 0.3.6)
@@ -41,6 +45,7 @@ GEM
     arel (8.0.0)
     builder (3.2.3)
     byebug (9.1.0)
+    coderay (1.1.2)
     concurrent-ruby (1.0.5)
     crass (1.0.2)
     erubi (1.6.1)
@@ -54,6 +59,9 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
+    json (1.8.3)
+    jsonapi (0.1.1.beta2)
+      json (~> 1.8)
     kaminari (1.0.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.0.1)
@@ -90,6 +98,14 @@ GEM
       jquery-ui-rails (>= 4.2.2)
       kaminari (~> 1.0)
       rails (> 4.0)
+    pry (0.11.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    pry-byebug (3.5.0)
+      byebug (~> 9.1)
+      pry (~> 0.10)
+    pry-rails (0.3.6)
+      pry (>= 0.10.4)
     puma (3.10.0)
     rack (2.0.3)
     rack-test (0.7.0)
@@ -146,10 +162,12 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  byebug
+  active_model_serializers (~> 0.10.0)
   listen (>= 3.0.5, < 3.2)
   pg (~> 0.18)
   plutus
+  pry-byebug
+  pry-rails
   puma (~> 3.7)
   rails (~> 5.1.4)
   spring
