@@ -18,7 +18,16 @@ gem 'active_model_serializers', '~> 0.10.0'
 group :development, :test do
   gem 'pry-rails'
   gem 'pry-byebug'
+
+  # Testing framework
+  gem 'rspec-rails', '~> 3.5'
+  gem 'factory_girl_rails'
+  gem 'database_cleaner', '~> 1.6.0'
+  gem 'airborne' # api testing helper methods
 end
+
+# code coverage
+gem 'simplecov', :require => false, :group => :test
 
 group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
