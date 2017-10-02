@@ -1,4 +1,6 @@
 class EntriesController < ApplicationController
+  before_action :set_entry, only: [:show, :update]
+
   # GET /entries
   def index
 
@@ -11,7 +13,13 @@ class EntriesController < ApplicationController
 
   # POST /entries
   def create
+    @entry = Plutus::Entry.create(entry_params)
 
+    if @entry.save
+      render json: @entry
+    else
+      render json: { errors: @entry.errors }
+    end
   end
 
   # PUT /entries/1
@@ -20,6 +28,10 @@ class EntriesController < ApplicationController
   end
 
   private
+
+  def set_entry
+    @entry = Plutus::Entry.find(params[:id])
+  end
 
   def entry_params
     params.require(:entry).permit(
