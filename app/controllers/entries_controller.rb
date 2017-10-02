@@ -3,12 +3,13 @@ class EntriesController < ApplicationController
 
   # GET /entries
   def index
-
+    # TODO add pagination
+    render json: Plutus::Entry.all
   end
 
   # GET /entries/1
   def show
-
+    render json: @entry
   end
 
   # POST /entries

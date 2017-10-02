@@ -1,6 +1,6 @@
 class Plutus::EntrySerializer < ActiveModel::Serializer
   attributes :id, :description, :date
 
-  has_many :debits, serializer: DebitSerializer, namespace: Plutus
-  has_many :credits, serializer: CreditSerializer, namespace: Plutus
+  has_many :debit_amounts, namespace: Plutus
+  has_many :credit_amounts, namespace: Plutus
 end
