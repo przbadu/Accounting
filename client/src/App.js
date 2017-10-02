@@ -1,17 +1,41 @@
 import React, { Component } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+// Bootstrap
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
 
-import NavigationBar from './components/Pages/NavigationBar'
+// components
+import { NavigationBar, NotFound } from './components/Pages';
+import { Dashboard } from './containers/Dashboards';
+import { NewEntryPage } from './containers/Entries';
+import { ChartOfAccountPage } from './containers/Settings';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="container">
-        <p>Hello World</p>
+export default function App() {
+  const supportsHistory = 'pushState' in window.history;
+
+  return (
+    <Router forceRefresh={!supportsHistory}>
+      <div>
+        <NavigationBar />
+
+        <div className="container">
+          <Switch>
+            {/* Root path */}
+            <Route exact path="/" component={Dashboard} />
+
+            {/* Journal Entries path */}
+            <Route path="/entries/new" component={NewEntryPage} />
+            <Route
+              path="/settings/account-heads"
+              component={ChartOfAccountPage}
+            />
+
+            {/* 404 Not found */}
+            <Route component={NotFound} />
+          </Switch>
+        </div>
       </div>
-    );
-  }
+    </Router>
+  );
 }
-
-export default App;
