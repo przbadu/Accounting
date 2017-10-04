@@ -13,6 +13,7 @@ RSpec.describe EntriesController, type: :controller do
     it 'should return empty array' do
       get :index
 
+      expect_status 200
       expect_json([])
     end
 
@@ -24,6 +25,7 @@ RSpec.describe EntriesController, type: :controller do
 
       get :index
 
+      expect_status 200
       expect_json_sizes(2)
       expect_json('0', id: entry.id, description: entry.description)
       expect_json_sizes('0.debit_amounts', 1)
@@ -73,6 +75,7 @@ RSpec.describe EntriesController, type: :controller do
         entry_id: entry.id,
         account_id: @credit_account.id
       )
+      expect_status 200
     end
   end
 
@@ -87,6 +90,7 @@ RSpec.describe EntriesController, type: :controller do
           'Entry must have at least one debit amount'
         ]
       })
+      expect_status :unprocessable_entity
     end
 
     it 'Debit and credit chart of account must exists before using them' do
@@ -115,12 +119,14 @@ RSpec.describe EntriesController, type: :controller do
         expect_json(errors: {
           base: ['The credit and debit amounts are not equal']
         })
+        expect_status :unprocessable_entity
       end
 
       it 'should create entry with reference to account' do
         post :create, params: valid_params
         initialize_objects
 
+        expect_status 200
         expect_json(description: 'Order placed for widgets')
         expect_json(id: @entry.id)
         expect_json(date: '2017-10-02')
@@ -137,6 +143,111 @@ RSpec.describe EntriesController, type: :controller do
           id: @credit.id,
           type: @credit.type,
           amount: @credit.amount.to_s,
+          entry_id: @entry.id,
+          account_id: @credit_account.id
+        )
+      end
+    end
+  end
+
+  context "#update" do
+    it 'should raise validation error' do
+      Plutus::Asset.create(name: 'Cash')
+      Plutus::Liability.create(name: 'Unearned Revenue')
+      entry = Plutus::Entry.create(valid_params[:entry])
+
+      put :update, params: { id: entry.id, entry: { description: '' } }
+
+      expect_json(errors: { description: ["can't be blank"]})
+      expect_status :unprocessable_entity
+    end
+
+    it 'Debit and credit chart of account must exists before using them' do
+      Plutus::Asset.create(name: 'Cash')
+      Plutus::Liability.create(name: 'Unearned Revenue')
+      entry = Plutus::Entry.create(valid_params[:entry])
+
+      expect {
+        put :update,
+        params: {
+          id: entry.id,
+          entry: {
+            debits: [{ account_name: 'new account head' }]
+          }
+        }}
+        .to raise_error("Couldn't find Plutus::Account")
+    end
+
+    context 'Chart of account exists' do
+      before do
+        Plutus::Asset.create(name: 'Cash')
+        Plutus::Liability.create(name: 'Unearned Revenue')
+        @entry = Plutus::Entry.create(valid_params[:entry])
+      end
+
+      it 'Debit and Credit should balance' do
+        put :update, params: {
+          id: @entry.id,
+          entry: {
+            debits: [{
+              id: @entry.debit_amounts.first.id,
+              amount: 10
+            }]
+          }
+        }
+
+        expect_json(errors: {
+          base: ['The credit and debit amounts are not equal']
+        })
+      end
+
+      it 'Should delete nested attribute' do
+        debit_amount = @entry.debit_amounts.first
+        expect(Plutus::DebitAmount.count).to eq(1)
+        put :update, params: {
+          id: @entry.id,
+          entry: {
+            debits: [{
+              id: @entry.debit_amounts.first.id,
+              amount: 100.00,
+              _destroy: '1'
+            }]
+          }
+        }
+
+        expect_json(errors: {
+          base: ['The credit and debit amounts are not equal']
+        })
+      end
+
+      it 'should update entry with nested attributes' do
+        put :update, params: {
+          id: @entry.id,
+          entry: {
+            description: 'updated',
+            debits: [{ id: @entry.debit_amounts.first.id, amount: 120.00 }],
+            credits: [{ id: @entry.credit_amounts.first.id, amount: 120.00 }]
+          }
+        }
+
+        initialize_objects
+
+        expect_json(description: 'updated')
+        expect_json(id: @entry.id)
+        expect_json(date: '2017-10-02')
+        expect_json(
+          'debit_amounts.0',
+          id: @debit.id,
+          type: @debit.type,
+          amount: 120.00.to_s,
+          entry_id: @entry.id,
+          account_id: @debit_account.id
+        )
+        expect_json(
+          'credit_amounts.0',
+          id: @credit.id,
+          type: @credit.type,
+          amount: 120.00.to_s,
           entry_id: @entry.id,
           account_id: @credit_account.id
         )
