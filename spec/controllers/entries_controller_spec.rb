@@ -41,8 +41,10 @@ RSpec.describe EntriesController, type: :controller do
 
   context '#Show' do
     it 'should return 404 Not Found' do
-      expect { get :show, params: { id: 1 }}
-        .to raise_error("Couldn't find Plutus::Entry with 'id'=1")
+      get :show, params: { id: 1 }
+
+      expect_status 404
+      expect_json(global_errors: "Couldn't find resource with given id")
     end
 
     it 'should return entry by id' do
@@ -94,8 +96,10 @@ RSpec.describe EntriesController, type: :controller do
     end
 
     it 'Debit and credit chart of account must exists before using them' do
-      expect { post :create, params: valid_params }
-        .to raise_error("Couldn't find Plutus::Account")
+      post :create, params: valid_params
+
+      expect_status 404
+      expect_json(global_errors: "Couldn't find resource with given id")
     end
 
     context 'Chart of account exists' do
@@ -167,15 +171,15 @@ RSpec.describe EntriesController, type: :controller do
       Plutus::Liability.create(name: 'Unearned Revenue')
       entry = Plutus::Entry.create(valid_params[:entry])
 
-      expect {
-        put :update,
-        params: {
-          id: entry.id,
-          entry: {
-            debits: [{ account_name: 'new account head' }]
-          }
-        }}
-        .to raise_error("Couldn't find Plutus::Account")
+      put :update, params: {
+        id: entry.id,
+        entry: {
+          debits: [{ account_name: 'new account head' }]
+        }
+      }
+
+      expect_status 404
+      expect_json(global_errors: "Couldn't find resource with given id")
     end
 
     context 'Chart of account exists' do
