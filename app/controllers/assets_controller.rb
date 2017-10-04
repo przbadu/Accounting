@@ -30,6 +30,6 @@ class AssetsController < ApplicationController
   end
 
   def assets_params
-    params.require(:asset).permit(:name)
+    params.require(:asset).permit(:name, :contra)
   end
 end

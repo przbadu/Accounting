@@ -30,6 +30,6 @@ class EquitiesController < ApplicationController
   end
 
   def equity_params
-    params.require(:equity).permit(:name)
+    params.require(:equity).permit(:name, :contra)
   end
 end
