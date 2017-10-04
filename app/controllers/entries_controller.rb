@@ -3,7 +3,6 @@ class EntriesController < ApplicationController
 
   # GET /entries
   def index
-    # TODO add pagination
     render json: Plutus::Entry.all
   end
 
@@ -19,13 +18,17 @@ class EntriesController < ApplicationController
     if @entry.save
       render json: @entry
     else
-      render json: { errors: @entry.errors }
+      render json: { errors: @entry.errors }, status: :unprocessable_entity
     end
   end
 
   # PUT /entries/1
   def update
-
+    if @entry.update(entry_params)
+      render json: @entry
+    else
+      render json: { errors: @entry.errors }, status: :unprocessable_entity
+    end
   end
 
   private
@@ -38,8 +41,8 @@ class EntriesController < ApplicationController
     params.require(:entry).permit(
       :description,
       :date,
-      debits: [:account_name, :amount],
-      credits: [:account_name, :amount]
+      debits: [:id, :account_name, :amount, :_destroy],
+      credits: [:id, :account_name, :amount, :_destroy]
     )
   end
 end
