@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   resources :assets, except: [:destroy, :index]
   resources :equities, except: [:destroy, :index]
   resources :liabilities, except: [:destroy, :index]
+  resources :revenues, except: [:destroy, :index]
 end

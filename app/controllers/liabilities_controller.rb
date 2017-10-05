@@ -1,5 +1,5 @@
 class LiabilitiesController < ApplicationController
-  before_action :set_liabilities, only: [:show, :update]
+  before_action :set_liability, only: [:show, :update]
 
   def show
     render json: @liability
@@ -25,7 +25,7 @@ class LiabilitiesController < ApplicationController
 
   private
 
-  def set_liabilities
+  def set_liability
     @liability = Plutus::Liability.find(params[:id])
   end
 
