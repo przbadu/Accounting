@@ -1,0 +1,11 @@
+{
+  "name": "ezy-accounting",
+  "description": "Accounting application",
+  "scripts": {
+    "postdeploy": "bin/rails db:migrate"
+  },
+  "env": {},
+  "formation": {},
+  "addons": [],
+  "buildpacks": []
+}
