@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :equities, except: [:destroy, :index]
       resources :liabilities, except: [:destroy, :index]
       resources :revenues, except: [:destroy, :index]
+      resources :expenses, except: [:destroy, :index]
     end
   end
 end
