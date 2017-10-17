@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe EntriesController, type: :controller do
+RSpec.describe Api::V1::EntriesController, type: :controller do
   let(:debit_params) {{ debits: [{ account_name: 'Cash', amount: 100.00 }]}}
   let(:credit_params) {
     { credits: [{ account_name: 'Unearned Revenue', amount: 100.00 }]}

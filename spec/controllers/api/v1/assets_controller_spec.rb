@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AssetsController, type: :controller do
+RSpec.describe Api::V1::AssetsController, type: :controller do
   context '#show' do
     it 'should return 404' do
       get :show, params: { id: 1 }

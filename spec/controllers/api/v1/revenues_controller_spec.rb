@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe RevenuesController, type: :controller do
+RSpec.describe Api::V1::RevenuesController, type: :controller do
   context '#show' do
     it 'should return 404' do
       get :show, params: { id: 1 }

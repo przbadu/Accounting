@@ -1,4 +1,4 @@
-class API::V1::BaseController < ApplicationController
+class Api::V1::BaseController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActionController::ParameterMissing, with: :strong_params_missing
 
