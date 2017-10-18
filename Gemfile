@@ -13,12 +13,17 @@ gem 'uglifier', '>= 1.3.0'
 gem 'webpacker'
 gem 'coffee-rails', '~> 4.2'
 gem 'turbolinks', '~> 5'
+gem 'jquery-ui-rails', '~> 5.0.0'
 
 # accounting
 gem 'plutus'
 
 # JSON API
 gem 'active_model_serializers', '~> 0.10.0'
+
+# Admin panel
+gem 'devise'
+gem 'activeadmin'
 
 group :development, :test do
   # Debuggers

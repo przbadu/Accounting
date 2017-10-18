@@ -9,6 +9,10 @@
   </head>
 
   <body>
+    <% flash.each do |key, msg| %>
+      <%= content_tag :div, msg, class: bootstrap_classes(key) %>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>
